@@ -22,8 +22,13 @@ print('-----------------------')
 crude_oil_recent = crude_oil[crude_oil['date'] >= '2022-01-01']
 columns = crude_oil_recent.columns[1:]
 for column in columns:
-    plt.plot(crude_oil_recent['date'], crude_oil_recent[column])
+    # print(f"{column}: {type(crude_oil_recent[column].iloc[0])}")
+    # print(crude_oil_recent.dtypes)
+    # print(crude_oil_recent.head())
+    # break
+    plt.plot(crude_oil_recent['date'].values, crude_oil_recent[column].values)
     plt.title(column.upper()+" vs. Date")
     plt.xlabel("Date")
     plt.ylabel(column.upper())
-    plt.savefig('eda_figures/'+column+'.png')
+    # plt.savefig('eda_figures/'+'adj_close'+'.png')
+    plt.show()
