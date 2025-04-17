@@ -19,6 +19,7 @@ def plot_raw_data(oil_data, title: str):
     plt.xlabel("Date")
     plt.ylabel(adj_close.upper())
     plt.savefig('model_figures/'+title+'_adj_close'+'.png')
+    plt.close()
 
 def plot_trans_data(oil_data, title: str):
     """
@@ -33,10 +34,27 @@ def plot_trans_data(oil_data, title: str):
     plt.xlabel("Date")
     plt.ylabel(adj_close.upper())
     plt.savefig('model_figures/trans_data_plot/'+title+'_adj_close'+'.png') 
+    plt.close()
+
+def plot_acf_pacf(train_data, title: str):
+    """
+    Plots and saves the acf and pacf figures based on the given training data
+    """
+    series = train_data['adj_close']
+    plt.figure()
+    plot_acf(series)
+    plt.savefig('model_figures/acf_pacf/'+title+'_acf.png')
+    plt.close()
+
+    plt.figure()
+    plot_pacf(series)
+    plt.savefig('model_figures/acf_pacf/'+title+'_pacf.png')
+    plt.close()
 
 def main():
     # get main dataset
     crude_oil = pd.read_csv('data/crude_oil.csv')
+    crude_oil['date'] = pd.to_datetime(crude_oil['date'])
 
     # split into 5 different time periods
     crude_oil_3 = crude_oil[crude_oil['date'] >= '2022-01-01']
@@ -89,6 +107,47 @@ def main():
     #   - plots (observe the ones we have saved above)
     #   - ACF Plot and PACF Plot
     #   - ADF test
+
+    # ACF and PACF Plots:
+
+    # full 
+    # plot_acf_pacf(train_full, 'full')
+    # # 20 years
+    # plot_acf_pacf(train_20, '20')
+    # # 10 years
+    # plot_acf_pacf(train_10, '10')
+    # # 5 years
+    # plot_acf_pacf(train_5, '5')
+    # # 3 years
+    # plot_acf_pacf(train_3, '3')
+
+    # ACF plot shows that the correlation with the lags are high and positive
+    # with a slow decline. The PACF plot show a single spike at 1 and then small
+    # or no spikes after. These are signs of a simple random walk, a common time
+    # series, which is not stationary
+
+    # ADF Test : the null hypothesis is that there is a unit root 
+    # (non stationary). This means that if you have a large p value then you 
+    # fail to reject the null hypothesis, which suggest that the data is not
+    # stationary
+    # adf_test_full = adfuller(train_full['adj_close'])
+    # print(f'full p-value: {adf_test_full[1]}') # 0.08 => do not reject null => not stationary
+
+    # adf_test_20 = adfuller(train_20['adj_close'])
+    # print(f'20 years p-value: {adf_test_20[1]}') # 0.03 => can reject null => stationary (no differencing needed)
+
+    # adf_test_10 = adfuller(train_10['adj_close'])
+    # print(f'10 years p-value: {adf_test_10[1]}') # 0.17 => do not reject null => not stationary
+
+    # adf_test_5 = adfuller(train_5['adj_close'])
+    # print(f'full data p-value: {adf_test_5[1]}') # 0.63 => do not reject null => not stationary
+
+    # adf_test_3 = adfuller(train_3['adj_close'])
+    # print(f'full data p-value: {adf_test_3[1]}') # 0.53 => do not reject null => not stationary
+
+    
+
+
 
 
 
