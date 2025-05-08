@@ -1,0 +1,3 @@
+mean absolue error: 5.616602821308457
+mean absolute percentage error: 0.07068858609460543
+residual mean squared error: 6.702965772731589
